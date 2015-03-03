@@ -1,4 +1,3 @@
-
 # Path Exporter 1.0
 
 bl_info = {
@@ -21,7 +20,7 @@ def do_export(context, filepath):
     file.write(bytes('var sampleClosedSpline = new THREE.ClosedSplineCurve3( [\n', 'UTF-8'))
     for v in ob.data.splines[0].points:
         #swap y and z because of Y-Up (threejs) and Z-Up (Blender) default
-        thisVertex = 'new THREE.Vector3(' + str(v.co.x) + ',' + str(v.co.z) + ',' + str(v.co.y) + '),\n'
+        thisVertex = 'new THREE.Vector3(' + str(round(v.co.x,2)) + ',' + str(round(v.co.z,2)) + ',' + str(round(v.co.y,2)) + '),\n'
         file.write(bytes(thisVertex, 'UTF-8'))
     file.write(bytes('] );', 'UTF-8'))
     file.flush()
