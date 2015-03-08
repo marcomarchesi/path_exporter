@@ -3,7 +3,7 @@
 bl_info = {
     "name": "Export Path to ThreeJS",
     "author": "Marco Marchesi",
-    "version": (1, 0),
+    "version": (1, 1),
     "blender": (2, 73, 0),
     "description": "Export path vertices to threejs",
     "category": "Import-Export"}
@@ -11,16 +11,25 @@ bl_info = {
 
 import bpy,bpy_extras
 from bpy_extras.io_utils import ExportHelper
+import mathutils
+
 
 def do_export(context, filepath):
 
     ob = context.active_object
+    wmtx = context.active_object.matrix_world
 
     file = open(filepath, "wb")
     file.write(bytes('var sampleClosedSpline = new THREE.ClosedSplineCurve3( [\n', 'UTF-8'))
+
     for v in ob.data.splines[0].points:
+        worldCoord = v.co * wmtx
+        worldCoord.x += wmtx[0][3]
+        worldCoord.y += wmtx[1][3]
+        worldCoord.z += wmtx[2][3]
+        
         #swap y and z because of Y-Up (threejs) and Z-Up (Blender) default
-        thisVertex = 'new THREE.Vector3(' + str(round(v.co.x,2)) + ',' + str(round(v.co.z,2)) + ',' + str(round(v.co.y,2)) + '),\n'
+        thisVertex = 'new THREE.Vector3(' + str(round(worldCoord.x,2)) + ',' + str(round(worldCoord.z,2)) + ',' + str(-1*round(worldCoord.y,2)) + '),\n'
         file.write(bytes(thisVertex, 'UTF-8'))
     file.write(bytes('] );', 'UTF-8'))
     file.flush()
