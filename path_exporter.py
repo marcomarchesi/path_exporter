@@ -40,10 +40,10 @@ def do_export(context, filepath):
 ###### EXPORT OPERATOR #######
 class PathExporter(bpy.types.Operator, ExportHelper):
     """Export the active path as an array of vertices to use within threejs"""
-    bl_idname = "export.path"
+    bl_idname = "export.js"
     bl_label = "Path Exporter"
 
-    filename_ext = ".path"
+    filename_ext = ".js"
 
     @classmethod
     def poll(cls, context):
@@ -84,7 +84,7 @@ class PathExporter(bpy.types.Operator, ExportHelper):
 ### REGISTER ###
 
 def menu_func(self, context):
-    self.layout.operator(PathExporter.bl_idname, text="Path Format(.path)")
+    self.layout.operator(PathExporter.bl_idname, text="Path for JS Format(.js)")
 
 def register():
     bpy.utils.register_module(__name__)
